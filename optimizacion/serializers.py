@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from optimizacion.modelos.producto import Producto
+from optimizacion.modelos.caracteristica import Caracteristica
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -14,9 +15,22 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         model = Group
         fields = ['url', 'name']
 
-class ProductoSerializer(serializers.HyperlinkedModelSerializer):
+class CaracteristicaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Caracteristica
+        fields = ['nombre', 'valor']
+        
+class ProductoSerializer(serializers.ModelSerializer):
+    caracteristicas = CaracteristicaSerializer(many=True)
+
     class Meta:
         model = Producto
-        fields = ['nombre', 'abreviatura', 'tipo']
+        fields = ['pk','nombre', 'abreviatura', 'tipo', 'caracteristicas']
 
-        
+    def create(self, validated_data):
+        caracteristicas_data = validated_data.pop('caracteristicas')
+        producto = Producto.objects.create(**validated_data)
+        for data in caracteristicas_data:
+            Caracteristica.objects.create(producto=producto, **data)
+        return producto
+     
