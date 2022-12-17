@@ -1,10 +1,8 @@
 from django.shortcuts import render
-
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets, permissions, generics
-from optimizacion.serializers import UserSerializer, GroupSerializer, ProductoSerializer
-from optimizacion.modelos.producto import Producto
-
+from rest_framework import viewsets, permissions
+from optimizacion.serializers import UserSerializer, GroupSerializer
+from optimizacion.controladores import producto
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -23,11 +21,3 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-class ProductoList(generics.ListCreateAPIView):
-    queryset = Producto.objects.all()
-    serializer_class = ProductoSerializer
-
-
-class ProductoDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Producto.objects.all()
-    serializer_class = ProductoSerializer    

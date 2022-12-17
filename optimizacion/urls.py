@@ -9,6 +9,7 @@ router.register(r'groups', views.GroupViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('producto', views.ProductoList.as_view(),name='Lista de productos'),
-    path('<int:pk>/producto', views.ProductoDetail.as_view(),name='Crud de productos'),
+    path('producto', views.producto.ProductoList.as_view(),name='Lista de productos'),
+    path('<int:pk>/producto', views.producto.ProductoDetail.as_view(),name='Crud de productos'),
+    path('producto_mezcla', views.producto.mezclaProducto.productoReformador,name='Mezcla de productos al reformador'),
 ]

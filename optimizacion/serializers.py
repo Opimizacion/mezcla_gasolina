@@ -19,6 +19,10 @@ class CaracteristicaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Caracteristica
         fields = ['nombre', 'valor']
+    
+   # def to_representation(self, data):
+   #   res = super(CaracteristicaSerializer, self).to_representation(data)
+   #   return {res['nombre']: res}
         
 class ProductoSerializer(serializers.ModelSerializer):
     caracteristicas = CaracteristicaSerializer(many=True)
@@ -33,4 +37,4 @@ class ProductoSerializer(serializers.ModelSerializer):
         for data in caracteristicas_data:
             Caracteristica.objects.create(producto=producto, **data)
         return producto
-     
+    

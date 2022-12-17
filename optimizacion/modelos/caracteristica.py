@@ -3,7 +3,7 @@ from optimizacion.modelos.producto import Producto
 
 class Caracteristica(models.Model):
     nombre = models.CharField(max_length=100)
-    valor = models.PositiveIntegerField()
+    valor = models.FloatField()
     producto = models.ForeignKey(Producto, related_name="caracteristicas", on_delete=models.CASCADE)
 
     def __str__(self):
