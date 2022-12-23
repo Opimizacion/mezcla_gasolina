@@ -37,10 +37,17 @@ class MezclaProducto (APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)   
 
-    def detallesResultantes():
+    def detallesResultantes(request, format=None):
         # Datos y Estructuras
         pInt = {'Nvl', 'Np', 'Ref'}
         pFin = {'G83', 'G90', 'G94'}
+        productos = prod_by_ids(request.data['ids'])
+        # productos bd 
+        pIntC = {
+            'Nvl': {'Rendimiento': 0.04776, 'RBN': productos[0]['RBN'], 'RVP': productos[0]['RVP'], 'PAzufre': productos[0]['Azufre'], 'Densidad': productos[0]['Dens']},
+            'Np':  {'Rendimiento': 0.151957, 'RBN': productos[1]['RBN'], 'RVP': productos[1]['RVP'], 'PAzufre': productos[1]['Azufre'], 'Densidad': productos[1]['Dens']},
+            'Ref': {'Rendimiento': 0.82455, 'RBN': productos[2]['RBN'], 'RVP': productos[2]['RVP'], 'PAzufre': productos[2]['Azufre'], 'Densidad': productos[2]['Dens']},
+        }
         pFinC = {
             'G83': {'price': 3300, 'RBNmin': 58.89, 'RVPmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
             'G90': {'price': 3500, 'RBNmin': 62.36, 'RVPmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
