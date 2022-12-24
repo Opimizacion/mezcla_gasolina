@@ -1,0 +1,3 @@
+[submodule "optimizacion/matematica/optmizacion_mezcla"]
+	path = optimizacion/matematica/optmizacion_mezcla
+	url = https://github.com/dvaldaliso/optmizacion_mezcla.git
