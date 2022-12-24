@@ -40,21 +40,21 @@ def densidad (dens):
     return dens * 1.05    
 
 #ron = 95
- def redimientoReformador (ron):
-        resultado = []
+def redimientoReformador (ron):    
+        resultado = {}
         producto = prod_by_abrev()
         nfa = na(producto[0]['Naft'], producto[0]['Arom'])
         rn = boxc (ron, nfa)
         rp = rvp (producto[0]['RVP'])
-
-        resultado.append({'RON': ron})  
-        resultado.append({'N+2A': nfa})
-        resultado.append({'boxc5+':rn})
-        resultado.append({'C5+': c5( rn )})
-        resultado.append({'RBN': obtenerRONtoRBN( ron )})
-        resultado.append({'RVP': rp})
-        resultado.append({'IMPVR': imrvp(rp)})
-        resultado.append({'Azufre': azufre (producto[0]['Azufre'])})
-        resultado.append({'Dens': densidad (producto[0]['Dens'])})
+        
+        resultado['RON']= ron
+        resultado['N+2A']= nfa
+        resultado['boxc5+']= rn
+        resultado['C5+']= c5( rn )
+        resultado['RBN']= obtenerRONtoRBN( ron )
+        resultado['RVP']= rp
+        resultado['IMPVR']= imrvp(rp)
+        resultado['Azufre']= azufre (producto[0]['Azufre'])
+        resultado['Dens']= densidad (producto[0]['Dens'])
 
         return resultado    
