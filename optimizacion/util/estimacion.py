@@ -23,8 +23,7 @@ def obtenerRONtoRBN (ron):
         return a + b*x +(c * pow(x,2)) + (d * pow(x,3)) + (e * pow(x,4))
 
 def rvp (rvp):
-    print (rvp , pow( rvp, 0.9 ))
-    return pow( rvp, 0.9 )
+    return rvp* 0.9 
 
 def imrvp (rvp):
     return pow( rvp, 1.25)
@@ -50,10 +49,10 @@ def redimientoReformador (ron):
         resultado['RON']= ron
         resultado['N+2A']= nfa
         resultado['boxc5+']= rn
-        resultado['C5+']= c5( rn )
-        resultado['RBN']= obtenerRONtoRBN( ron )
+        resultado['C5+']= round(c5( rn ), 2)
+        resultado['RBN']= round(obtenerRONtoRBN( ron ), 2)
         resultado['RVP']= rp
-        resultado['IMPVR']= imrvp(rp)
+        resultado['IMPVR']= round(imrvp(rp),4)
         resultado['Azufre']= azufre (producto[0]['Azufre'])
         resultado['Dens']= densidad (producto[0]['Dens'])
 

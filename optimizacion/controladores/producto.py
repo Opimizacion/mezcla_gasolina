@@ -11,7 +11,9 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from optimizacion.util.querys import prod_by_ids
 from optimizacion.util.estimacion import redimientoReformador
+from optimizacion.util.modelo import formatResult
 from optimizacion.matematica.optmizacion_mezcla.docplex.mezcla import run
+import json
 
 class ProductoList(generics.ListCreateAPIView):
     queryset = Producto.objects.all()
@@ -43,7 +45,6 @@ class MezclaProducto (APIView):
     @api_view(['POST'])
     @permission_classes([IsAuthenticated])
     def detallesResultantes(request, format=None):
-        
         productos = prod_by_ids(request.data['ids'])
         estimacionRef = redimientoReformador(94)
 
@@ -61,7 +62,6 @@ class MezclaProducto (APIView):
             'G90': {'price': 3500, 'RBNmin': 62.36, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
             'G94': {'price': 3746, 'RBNmin': 65.13, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200}
         }  
-        print(estimacionRef)
         demandaPF = {
             'G83': {'Min': 0, 'Max': 'M'},
             'G90': {'Min': 750, 'Max': 'M'},
@@ -70,9 +70,11 @@ class MezclaProducto (APIView):
         destil = 8744
         try:
             modelo = run (pInt,pFin,pIntC,pFinC,demandaPF,destil)
+            gasolina, totales= formatResult(modelo)
+            return Response({'modelo_estado': True,'result': gasolina,'total': totales}, status=status.HTTP_201_CREATED)
         except Exception as inst:
             print(type(inst))    # the exception instance
             print(inst)
             return Response({'modelo_estado': False,'result': inst}, status=status.HTTP_201_CREATED)
             
-        return Response({'modelo_estado': True,'result': modelo}, status=status.HTTP_201_CREATED)
+        
