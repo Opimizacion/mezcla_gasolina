@@ -50,7 +50,7 @@ class MezclaProducto (APIView):
 
         # Datos y Estructuras
         pInt = {'Nvl', 'Np', 'Ref'}
-        pFin = {'G83', 'G90', 'G94'}
+        pFin = {'83', '90', '94'}
         # productos bd 
         pIntC = {
             'Nvl': {'Rendimiento': 0.04776, 'RBN': productos[0]['RBN'], 'IMPVR': productos[0]['IMPVR'], 'PAzufre': productos[0]['Azufre']*productos[0]['Dens'], 'Densidad': productos[0]['Dens']},
@@ -58,19 +58,19 @@ class MezclaProducto (APIView):
             'Ref': {'Rendimiento': estimacionRef['C5+']/100, 'RBN': estimacionRef['RBN'], 'IMPVR': estimacionRef['IMPVR'], 'PAzufre': estimacionRef['Azufre']*estimacionRef['Dens'], 'Densidad': estimacionRef['Dens']},
         }
         pFinC = {
-            'G83': {'price': 3300, 'RBNmin': 58.89, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
-            'G90': {'price': 3500, 'RBNmin': 62.36, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
-            'G94': {'price': 3746, 'RBNmin': 65.13, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200}
+            '83': {'price': 3300, 'RBNmin': 58.89, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
+            '90': {'price': 3500, 'RBNmin': 62.36, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
+            '94': {'price': 3746, 'RBNmin': 65.13, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200}
         }  
         demandaPF = {
-            'G83': {'Min': 0, 'Max': 'M'},
-            'G90': {'Min': 750, 'Max': 'M'},
-            'G94': {'Min': 300, 'Max': 'M'}
+            '83': {'Min': 0, 'Max': 'M'},
+            '90': {'Min': 750, 'Max': 'M'},
+            '94': {'Min': 300, 'Max': 'M'}
         }
         destil = 8744
         try:
             modelo = run (pInt,pFin,pIntC,pFinC,demandaPF,destil)
-            gasolina, totales= formatResult(modelo)
+            gasolina, totales= formatResult(modelo, demandaPF)
             return Response({'modelo_estado': True,'result': gasolina,'total': totales}, status=status.HTTP_201_CREATED)
         except Exception as inst:
             print(type(inst))    # the exception instance
