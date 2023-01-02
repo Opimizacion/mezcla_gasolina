@@ -17,16 +17,17 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 class CaracteristicaSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(required=False)
     class Meta:
         model = Caracteristica
-        fields = ['nombre', 'valor']
+        fields = ['id','nombre', 'valor']
     
    # def to_representation(self, data):
    #   res = super(CaracteristicaSerializer, self).to_representation(data)
    #   return {res['nombre']: res}
         
 class ProductoSerializer(serializers.ModelSerializer):
-    caracteristicas = CaracteristicaSerializer(read_only=True,many=True)
+    caracteristicas = CaracteristicaSerializer(many=True)
    
     class Meta:
         model = Producto
@@ -39,25 +40,31 @@ class ProductoSerializer(serializers.ModelSerializer):
             Caracteristica.objects.create(producto=producto, **data)
         return producto
 
-    def update(self, instance, validated_data,*args, **kwargs):
-        print(args, kwargs)
-        producto = Producto.objects.update(**validated_data)
+    def update(self, instance, validated_data):
 
         instance.nombre = validated_data.get('nombre', instance.nombre)
         instance.abreviatura = validated_data.get('abreviatura', instance.abreviatura)
-       
-        request = self.context['request']
-        id=request.data.get('pk')
-        caracteristicas_data = request.data.get('caracteristicas')
-        caracteristicas_data = attempt_json_deserialize(caracteristicas_data, expect_type=list)
-        pr = Producto.objects.get(id = id).caracteristicas.all()
-        for a in pr:
-            a.delete()
-       
-        caracteristicas_objs = [Caracteristica.objects.create(producto=instance,**data) for data in caracteristicas_data]
-        validated_data['caracteristicas'] = caracteristicas_objs
-        instance = super().update(instance, validated_data)
         instance.save()
+
+        items = validated_data.get('caracteristicas')
+        caract_db=instance.caracteristicas.all()
+        ids=[]
+        for item in items:
+            item_id = item.get('id', None)
+
+            if item_id:
+                ids.append(item_id)
+                caract_item = Caracteristica.objects.get(id=item_id, producto=instance)
+                caract_item.nombre = item.get('nombre', caract_item.nombre)
+                caract_item.valor = item.get('valor', caract_item.valor)
+                caract_item.save()
+            else:
+                c=Caracteristica.objects.create(producto=instance, **item)
+                c.save()
+                ids.append(c.id)
+        for index in caract_db:
+            if index.id not in ids:
+                index.delete()
         return instance
    
     
