@@ -21,10 +21,7 @@ class CaracteristicaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Caracteristica
         fields = ['id','nombre', 'valor']
-    
-   # def to_representation(self, data):
-   #   res = super(CaracteristicaSerializer, self).to_representation(data)
-   #   return {res['nombre']: res}
+
         
 class ProductoSerializer(serializers.ModelSerializer):
     caracteristicas = CaracteristicaSerializer(many=True)
@@ -51,7 +48,6 @@ class ProductoSerializer(serializers.ModelSerializer):
         ids=[]
         for item in items:
             item_id = item.get('id', None)
-
             if item_id:
                 ids.append(item_id)
                 caract_item = Caracteristica.objects.get(id=item_id, producto=instance)
@@ -62,6 +58,7 @@ class ProductoSerializer(serializers.ModelSerializer):
                 c=Caracteristica.objects.create(producto=instance, **item)
                 c.save()
                 ids.append(c.id)
+
         for index in caract_db:
             if index.id not in ids:
                 index.delete()
