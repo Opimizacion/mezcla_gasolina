@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from optimizacion.serializadores.producto import ProductoSerializer
+from optimizacion.serializadores.producto_final import ProductoFinalSerializer
+from optimizacion.serializadores.restriccion_producto import RestriccionProductoSerializer
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
