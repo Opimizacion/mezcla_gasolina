@@ -6,5 +6,8 @@ class RestriccionProducto(models.Model):
     valor = models.FloatField()
     producto = models.ForeignKey(ProductoFinal, related_name="restricciones", on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['pk']
+        
     def __str__(self):
         return self.nombre+' '+str(self.valor)

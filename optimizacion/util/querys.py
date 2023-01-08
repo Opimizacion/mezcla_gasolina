@@ -19,3 +19,9 @@ def prod_by_ids(sql):
         cursor.execute("SELECT * FROM producto_caracteristica WHERE id in %s", [sql])
         row =dictfetchall(cursor)
     return row
+
+def prod_demanda():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM demanda_precio_producto")
+        row =dictfetchall(cursor)
+    return row

@@ -9,7 +9,7 @@ from django.http import Http404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from optimizacion.util.querys import prod_by_ids
+from optimizacion.util.querys import *
 from optimizacion.util.estimacion import redimientoReformador
 from optimizacion.util.modelo import formatResult
 from optimizacion.matematica.optmizacion_mezcla.docplex.mezcla import run
@@ -47,6 +47,7 @@ class MezclaProducto (APIView):
     def detallesResultantes(request, format=None):
         productos = prod_by_ids(request.data['ids'])
         estimacionRef = redimientoReformador(94)
+        demandas = prod_demanda()
 
         # Datos y Estructuras
         pInt = {'Nvl', 'Np', 'Ref'}
@@ -58,14 +59,14 @@ class MezclaProducto (APIView):
             'Ref': {'Rendimiento': estimacionRef['C5+']/100, 'RBN': estimacionRef['RBN'], 'IMPVR': estimacionRef['IMPVR'], 'PAzufre': estimacionRef['Azufre']*estimacionRef['Dens'], 'Densidad': estimacionRef['Dens']},
         }
         pFinC = {
-            '83': {'price': 3300, 'RBNmin': 58.89, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
-            '90': {'price': 3500, 'RBNmin': 62.36, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200},
-            '94': {'price': 3746, 'RBNmin': 65.13, 'IMPVRmax': 0.617498832595756, 'Azufemax': 1000, 'Densidadmin': 0.7200}
+            '83': {'price': demandas[0]['precio'], 'RBNmin': demandas[0]['RBNmin'], 'IMPVRmax': demandas[0]['IMPVRmax'], 'Azufemax': demandas[0]['Azufemax'], 'Densidadmin': demandas[0]['Densidadmin']},
+            '90': {'price': demandas[1]['precio'], 'RBNmin': demandas[1]['RBNmin'], 'IMPVRmax': demandas[1]['IMPVRmax'], 'Azufemax': demandas[1]['Azufemax'], 'Densidadmin': demandas[1]['Densidadmin']},
+            '94': {'price': demandas[2]['precio'], 'RBNmin': demandas[2]['RBNmin'], 'IMPVRmax': demandas[2]['IMPVRmax'], 'Azufemax': demandas[2]['Azufemax'], 'Densidadmin': demandas[2]['Densidadmin']}
         }  
         demandaPF = {
-            '83': {'Min': 0, 'Max': 'M'},
-            '90': {'Min': 750, 'Max': 'M'},
-            '94': {'Min': 300, 'Max': 'M'}
+            '83': {'Min': demandas[0]['demandaMin'], 'Max': 'M' if demandas[0]['demandaMax'] == 0 else demandas[0]['demandaMax']},
+            '90': {'Min': demandas[1]['demandaMin'], 'Max': 'M' if demandas[1]['demandaMax'] == 0 else demandas[1]['demandaMax']},
+            '94': {'Min': demandas[2]['demandaMin'], 'Max': 'M' if demandas[2]['demandaMax'] == 0 else demandas[2]['demandaMax']}
         }
         destil = 8744
         try:
