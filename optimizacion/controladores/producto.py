@@ -61,8 +61,8 @@ class MezclaProducto (APIView):
         pFinC = {
             '83': {'price': demandas[0]['precio'], 'RBNmin': demandas[0]['RBNmin'], 'IMPVRmax': demandas[0]['IMPVRmax'], 'Azufemax': demandas[0]['Azufemax'], 'Densidadmin': demandas[0]['Densidadmin']},
             '90': {'price': demandas[1]['precio'], 'RBNmin': demandas[1]['RBNmin'], 'IMPVRmax': demandas[1]['IMPVRmax'], 'Azufemax': demandas[1]['Azufemax'], 'Densidadmin': demandas[1]['Densidadmin']},
-            '94': {'price': demandas[2]['precio'], 'RBNmin': demandas[2]['RBNmin'], 'IMPVRmax': demandas[2]['IMPVRmax'], 'Azufemax': demandas[2]['Azufemax'], 'Densidadmin': demandas[2]['Densidadmin']}
-        }  
+            '94': {'price': demandas[2]['precio'], 'RBNmin': round(demandas[2]['RBNmin'],2), 'IMPVRmax': demandas[2]['IMPVRmax'], 'Azufemax': demandas[2]['Azufemax'], 'Densidadmin': demandas[2]['Densidadmin']}
+        }
         demandaPF = {
             '83': {'Min': demandas[0]['demandaMin'], 'Max': 'M' if demandas[0]['demandaMax'] == 0 else demandas[0]['demandaMax']},
             '90': {'Min': demandas[1]['demandaMin'], 'Max': 'M' if demandas[1]['demandaMax'] == 0 else demandas[1]['demandaMax']},
@@ -76,6 +76,6 @@ class MezclaProducto (APIView):
         except Exception as inst:
             print(type(inst))    # the exception instance
             print(inst)
-            return Response({'modelo_estado': False,'result': inst}, status=status.HTTP_201_CREATED)
+            return Response({'modelo_estado': False,'result': '!! Error al resolver el modelo'}, status=status.HTTP_201_CREATED)
             
         
