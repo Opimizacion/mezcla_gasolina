@@ -9,7 +9,7 @@ class ProductoSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = Producto
-        fields = ['pk','nombre','abreviatura','caracteristicas']
+        fields = ['pk','nombre','abreviatura','tipo','caracteristicas']
 
     def create(self, validated_data):
         caracteristicas_data = validated_data.pop('caracteristicas')

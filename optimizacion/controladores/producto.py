@@ -50,23 +50,27 @@ class MezclaProducto (APIView):
         demandas = prod_demanda()
 
         # Datos y Estructuras
-        pInt = {'Nvl', 'Np', 'Ref'}
-        pFin = {'83', '90', '94'}
+        pInt = {'Nvl', 'Np', 'Ref', 'Ni', 'Ncraq'}
+        pFin = {'83', '90', '94', 'Nex'}
         # productos bd 
         pIntC = {
             'Nvl': {'Rendimiento': 0.04776, 'RBN': productos[0]['RBN'], 'IMPVR': productos[0]['IMPVR'], 'PAzufre': productos[0]['Azufre']*productos[0]['Dens'], 'Densidad': productos[0]['Dens']},
             'Np':  {'Rendimiento': 0.151957, 'RBN': productos[1]['RBN'], 'IMPVR': productos[1]['IMPVR'], 'PAzufre': productos[1]['Azufre']*productos[1]['Dens'], 'Densidad': productos[1]['Dens']},
             'Ref': {'Rendimiento': estimacionRef['C5+']/100, 'RBN': estimacionRef['RBN'], 'IMPVR': estimacionRef['IMPVR'], 'PAzufre': estimacionRef['Azufre']*estimacionRef['Dens'], 'Densidad': estimacionRef['Dens']},
+            'Ni': {'Rendimiento': 0, 'RBN': 0, 'IMPVR': 0, 'PAzufre': 0, 'Densidad': 0},
+            'Ncraq': {'Rendimiento': 0, 'RBN': 0, 'IMPVR': 0, 'PAzufre': 0, 'Densidad': 0}
         }
         pFinC = {
             '83': {'price': demandas[0]['precio'], 'RBNmin': demandas[0]['RBNmin'], 'IMPVRmax': demandas[0]['IMPVRmax'], 'Azufemax': demandas[0]['Azufemax'], 'Densidadmin': demandas[0]['Densidadmin']},
             '90': {'price': demandas[1]['precio'], 'RBNmin': demandas[1]['RBNmin'], 'IMPVRmax': demandas[1]['IMPVRmax'], 'Azufemax': demandas[1]['Azufemax'], 'Densidadmin': demandas[1]['Densidadmin']},
-            '94': {'price': demandas[2]['precio'], 'RBNmin': round(demandas[2]['RBNmin'],2), 'IMPVRmax': demandas[2]['IMPVRmax'], 'Azufemax': demandas[2]['Azufemax'], 'Densidadmin': demandas[2]['Densidadmin']}
+            '94': {'price': demandas[2]['precio'], 'RBNmin': round(demandas[2]['RBNmin'],2), 'IMPVRmax': demandas[2]['IMPVRmax'], 'Azufemax': demandas[2]['Azufemax'], 'Densidadmin': demandas[2]['Densidadmin']},
+            'Nex': {'price': demandas[3]['precio']}
         }
         demandaPF = {
             '83': {'Min': demandas[0]['demandaMin'], 'Max': 'M' if demandas[0]['demandaMax'] == 0 else demandas[0]['demandaMax']},
             '90': {'Min': demandas[1]['demandaMin'], 'Max': 'M' if demandas[1]['demandaMax'] == 0 else demandas[1]['demandaMax']},
-            '94': {'Min': demandas[2]['demandaMin'], 'Max': 'M' if demandas[2]['demandaMax'] == 0 else demandas[2]['demandaMax']}
+            '94': {'Min': demandas[2]['demandaMin'], 'Max': 'M' if demandas[2]['demandaMax'] == 0 else demandas[2]['demandaMax']},
+            'Nex': {'Min': demandas[3]['demandaMin'], 'Max': 'M' if demandas[3]['demandaMax'] == 0 else demandas[3]['demandaMax']}
         }
         destil = 8744
         try:
